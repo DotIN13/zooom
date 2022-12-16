@@ -1,0 +1,16 @@
+{
+  "name": "zoomerang",
+  "version": "1.0.0",
+  "description": "An upgrade to zooming.js",
+  "main": "index.js",
+  "author": "DotIN13",
+  "license": "MIT",
+  "private": true,
+  "packageManager": "yarn@3.3.0",
+  "dependencies": {
+    "stimulus": "^3.2.1"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

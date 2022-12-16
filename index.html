@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="importmap">
+      {
+        "imports": {
+          "stimulus": "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js"
+        }
+      }
+    </script>
+    <title>zoomerang</title>
+    <meta charset="utf-8" />
+    <script type="module">
+      import { Application } from "stimulus";
+      window.Stimulus = Application.start();
+      import zoomerangController from "./javascript/controllers/zoomerang_controller.js";
+      import PortalController from "./javascript/controllers/portal_controller.js";
+      Stimulus.register("zoomerang", zoomerangController);
+      Stimulus.register("portal", PortalController);
+    </script>
+    <link
+      rel="stylesheet"
+      href="./assets/stylesheets/custom.css"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <div data-controller="portal">
+      <img
+        data-portal-target="image"
+        src="assets/images/cross.jpeg"
+        height="300"
+        data-action="click->portal#open"
+      />
+      <template data-portal-target="template">
+        <div
+          class="zoomerang-container player-inner"
+          data-controller="zoomerang"
+          data-action="playerAdded->zoomerang#added click->zoomerang#zoomOut"
+        >
+          <div class="zoomerang-image-container">
+            <img
+              class="zoomerang-image"
+              data-action="load->zoomerang#zoomIn"
+              data-zoomerang-target="image"
+              src="assets/images/cross.jpeg"
+            />
+          </div>
+        </div>
+      </template>
+    </div>
+  </body>
+</html>

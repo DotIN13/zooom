@@ -1,0 +1,21 @@
+body {
+  height: 150vh;
+}
+
+.portal-player {
+  position: fixed;
+  inset: 0;
+}
+
+.zoomerang-container {
+  position: relative;
+}
+
+.zoomerang-container img {
+  display: block;
+}
+
+.zoomerang-image {
+  inset: 0;
+  visibility: hidden;
+}
