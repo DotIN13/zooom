@@ -5,7 +5,7 @@ export default class extends Controller {
   static outlets = ["portal"];
 
   initialize() {
-    this.element.dataset.zoomerangPortalOutlet = `#${this.element.dataset.portalId}`;
+    this.element.dataset.zooomPortalOutlet = `#${this.element.dataset.portalId}`;
     this.portalImage = this.portalOutlet.imageTarget;
     this.portalRect = this.portalImage.getBoundingClientRect();
   }
@@ -44,29 +44,34 @@ export default class extends Controller {
       transform = "none";
     this.commitStyles(style, { ...pos, position, transition, transform });
 
-    window.requestAnimationFrame(() => {
-      transition = "transform 400ms cubic-bezier(0.4, 0, 0, 1)";
-      transform = this.newTransform(this.imageRect, this.portalRect);
-      this.commitStyles(style, { transition, transform });
-    });
-
-    const updateTopLeft = () => {
-      const newPortalRect = this.portalImage.getBoundingClientRect();
-
-      let { top, left } = this.imageRect;
-      top = top + newPortalRect.top - this.portalRect.top;
-      left = left + newPortalRect.left - this.portalRect.left;
-      this.commitStyles(style, { top, left });
-      window.requestAnimationFrame(updateTopLeft);
-    };
-    updateTopLeft();
-
     this.imageTarget.addEventListener("transitionend", (e) => {
       if (e.propertyName != "transform") return;
 
-      this.portalOutlet.removeContainer(this.element.closest(".portal-player"));
       this.zoomingOut = false;
+      this.portalOutlet.removeContainer(this.element.closest(".portal-player"));
     });
+
+    window.requestAnimationFrame(() => {
+      transition = "transform 400ms cubic-bezier(0.4, 0, 0, 1)";
+      transform = this.newTransform(this.imageRect, this.portalRect);
+      this.updateTopLeft();
+      this.commitStyles(style, { transition, transform });
+    });
+  }
+
+  updateTopLeft() {
+    if (!this.zoomingOut) return;
+
+    const newPortalRect = this.portalImage.getBoundingClientRect();
+
+    let { top, left } = this.imageRect;
+    const topDiff = newPortalRect.top - this.portalRect.top;
+    const leftDiff = newPortalRect.left - this.portalRect.left;
+
+    const style = this.imageTarget.style;
+    if (topDiff != 0 || leftDiff != 0)
+      this.commitStyles(style, { top: top + topDiff, left: left + leftDiff });
+    window.requestAnimationFrame(this.updateTopLeft.bind(this));
   }
 
   // Calculate transform properties from origin and target locations

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="importmap">
+      {
+        "imports": {
+          "stimulus": "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js",
+          "zooom": "/dist/zooom.js"
+        }
+      }
+    </script>
+    <title>zooom</title>
+    <meta charset="utf-8" />
+    <script type="module">
+      import { Application } from "stimulus";
+      window.Stimulus = Application.start();
+      import { PortalController, ZooomController } from "zooom";
+      Stimulus.register("zooom", ZooomController);
+      Stimulus.register("portal", PortalController);
+    </script>
+    <link
+      rel="stylesheet"
+      href="./assets/stylesheets/custom.css"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <main data-controller="portal">
+      <img
+        data-portal-target="image"
+        src="./assets/images/cross.jpeg"
+        height="300"
+        data-action="click->portal#open"
+      />
+      <template data-portal-target="template">
+        <div
+          class="zooom-container player-inner"
+          data-controller="zooom"
+          data-action="playerAdded->zooom#added "
+        >
+          <div class="zooom-image-container">
+            <img
+              class="zooom-image"
+              data-action="load->zooom#zoomIn click->zooom#zoomOut scroll@window->zooom#zoomOut"
+              data-zooom-target="image"
+              src="./assets/images/cross.jpeg"
+            />
+          </div>
+        </div>
+      </template>
+    </div>
+  </body>
+</html>

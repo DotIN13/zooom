@@ -379,9 +379,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zoomerang@workspace:.":
+"zooom@workspace:.":
   version: 0.0.0-use.local
-  resolution: "zoomerang@workspace:."
+  resolution: "zooom@workspace:."
   dependencies:
     http-server: ^14.1.1
     stimulus: ^3.2.1

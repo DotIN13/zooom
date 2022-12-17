@@ -11,13 +11,12 @@ main {
   inset: 0;
 }
 
-.zoomerang-container {
+.zooom-container {
   position: relative;
 }
 
-img.zoomerang-image {
+img.zooom-image {
   display: block;
   transform: none;
   visibility: hidden;
 }
-

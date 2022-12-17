@@ -12,14 +12,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     ],\
     "dependencyTreeRoots": [\
       {\
-        "name": "zoomerang",\
+        "name": "zooom",\
         "reference": "workspace:."\
       }\
     ],\
     "enableTopLevelFallback": true,\
     "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
     "fallbackExclusionList": [\
-      ["zoomerang", ["workspace:."]]\
+      ["zooom", ["workspace:."]]\
     ],\
     "fallbackPool": [\
     ],\
@@ -495,11 +495,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["zoomerang", [\
+      ["zooom", [\
         ["workspace:.", {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["zoomerang", "workspace:."],\
+            ["zooom", "workspace:."],\
             ["http-server", "npm:14.1.1"],\
             ["stimulus", "npm:3.2.1"]\
           ],\
