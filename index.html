@@ -25,7 +25,7 @@
     />
   </head>
   <body>
-    <div data-controller="portal">
+    <main data-controller="portal">
       <img
         data-portal-target="image"
         src="assets/images/cross.jpeg"
@@ -36,12 +36,12 @@
         <div
           class="zoomerang-container player-inner"
           data-controller="zoomerang"
-          data-action="playerAdded->zoomerang#added click->zoomerang#zoomOut"
+          data-action="playerAdded->zoomerang#added "
         >
           <div class="zoomerang-image-container">
             <img
               class="zoomerang-image"
-              data-action="load->zoomerang#zoomIn"
+              data-action="load->zoomerang#zoomIn click->zoomerang#zoomOut scroll@window->zoomerang#zoomOut"
               data-zoomerang-target="image"
               src="assets/images/cross.jpeg"
             />

@@ -1,62 +1,90 @@
 import { Controller } from "stimulus";
 
 export default class extends Controller {
-  static targets = ["placeholder", "image"];
-
+  static targets = ["image"];
   static outlets = ["portal"];
 
   initialize() {
     this.element.dataset.zoomerangPortalOutlet = `#${this.element.dataset.portalId}`;
-    this.portalRect = this.portalOutlet.imageTarget.getBoundingClientRect();
+    this.portalImage = this.portalOutlet.imageTarget;
+    this.portalRect = this.portalImage.getBoundingClientRect();
   }
 
   zoomIn() {
     this.imageRect = this.imageTarget.getBoundingClientRect();
-    const zoomIn = [{ transform: this.newTransform() }, { transform: "none" }];
-    const zoomInTiming = {
-      duration: 400,
-      iterations: 1,
-      fill: "forwards",
-      easing: "cubic-bezier(0.4, 0, 0, 1)",
-    };
-    this.animation = this.imageTarget.animate(zoomIn, zoomInTiming); // Start animation
-    this.imageTarget.style.visibility = "visible"; // Then set the image to visible
+    const style = this.imageTarget.style;
+    let transition = null,
+      transform = this.newTransform(this.imageRect, this.portalRect);
+    this.commitStyles(style, { transition, transform });
+
+    window.requestAnimationFrame(() => {
+      let visibility = "visible";
+      transition = "transform 400ms cubic-bezier(0.4, 0, 0, 1)";
+      transform = null;
+      this.commitStyles(style, { visibility, transition, transform });
+    });
   }
 
+  // Set the image to fixed, and place it in its current position.
+  // Then set transform for the image to zoom it out into its portal position.
+  // In the process, check if the portal moved in every frame,
+  // also move the player when necessary.
   zoomOut() {
-    if (this.animation.playState == "running") {
-      this.animation.commitStyles();
-      this.animation.cancel();
-    }
+    if (this.zoomingOut) return;
 
-    // The imageRect should not be updated
-    this.portalRect = this.portalOutlet.imageTarget.getBoundingClientRect();
+    this.zoomingOut = true;
 
-    const zoomOut = [
-      { transform: this.imageTarget.style.transform || "none" },
-      { transform: this.newTransform() },
-    ];
-    const zoomOutTiming = {
-      duration: 400,
-      iterations: 1,
-      fill: "forwards",
-      easing: "cubic-bezier(0.4, 0, 0, 1)",
+    const style = this.imageTarget.style;
+    this.imageRect = this.imageTarget.getBoundingClientRect();
+
+    let { top, left, width, height } = this.imageRect;
+    const pos = { top, left, width, height };
+    let position = "fixed",
+      transition = "none",
+      transform = "none";
+    this.commitStyles(style, { ...pos, position, transition, transform });
+
+    window.requestAnimationFrame(() => {
+      transition = "transform 400ms cubic-bezier(0.4, 0, 0, 1)";
+      transform = this.newTransform(this.imageRect, this.portalRect);
+      this.commitStyles(style, { transition, transform });
+    });
+
+    const updateTopLeft = () => {
+      const newPortalRect = this.portalImage.getBoundingClientRect();
+
+      let { top, left } = this.imageRect;
+      top = top + newPortalRect.top - this.portalRect.top;
+      left = left + newPortalRect.left - this.portalRect.left;
+      this.commitStyles(style, { top, left });
+      window.requestAnimationFrame(updateTopLeft);
     };
-    this.imageTarget
-      .animate(zoomOut, zoomOutTiming)
-      .finished.then(() =>
-        this.portalOutlet.removeContainer(this.element.parentElement)
-      );
+    updateTopLeft();
+
+    this.imageTarget.addEventListener("transitionend", (e) => {
+      if (e.propertyName != "transform") return;
+
+      this.portalOutlet.removeContainer(this.element.closest(".portal-player"));
+      this.zoomingOut = false;
+    });
   }
 
-  newTransform() {
-    const end = this.portalRect; // Transform to
-    const start = this.imageRect; // Transform from
-
+  // Calculate transform properties from origin and target locations
+  newTransform(start, end) {
     const scaleX = end.width / start.width;
     const scaleY = end.height / start.height;
     const translateX = end.left - start.left + (end.width - start.width) / 2;
     const translateY = end.top - start.top + (end.height - start.height) / 2;
     return `translate(${translateX}px, ${translateY}px) scaleX(${scaleX}) scaleY(${scaleY})`;
+  }
+
+  // Assign styles to the element at once,
+  // add missing "px" to positioning properties
+  commitStyles(elStyle, styles) {
+    Object.keys(styles).forEach((key) => {
+      if (["top", "left", "bottom", "right", "height", "width"].includes(key))
+        styles[key] = `${styles[key]}px`;
+    });
+    Object.assign(elStyle, styles);
   }
 }

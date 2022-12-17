@@ -37,7 +37,6 @@ export default class extends Controller {
   newContainer() {
     const container = document.createElement("div");
     container.className = "portal-player player-outer";
-    // Apply id to the player portal
     Object.assign(container.dataset, this.containerDatasetValue);
     return container;
   }

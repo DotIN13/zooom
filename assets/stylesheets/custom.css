@@ -1,5 +1,9 @@
 body {
-  height: 150vh;
+  height: 200vh;
+}
+
+main {
+  margin: 100vh 0;
 }
 
 .portal-player {
@@ -11,11 +15,9 @@ body {
   position: relative;
 }
 
-.zoomerang-container img {
+img.zoomerang-image {
   display: block;
-}
-
-.zoomerang-image {
-  inset: 0;
+  transform: none;
   visibility: hidden;
 }
+
