@@ -7,8 +7,9 @@
   "license": "MIT",
   "packageManager": "yarn@3.3.0",
   "scripts": {
-    "build:dev": "esbuild index.js --bundle --format=esm > dist/zooom.js",
-    "build:prod": "esbuild index.js --bundle --minify --sourcemap --target=chrome79,firefox106,safari12 --format=esm > dist/zooom.min.js",
+    "build:dev": "esbuild zooom=index.js --bundle --format=esm --outdir=dist",
+    "build:prod": "esbuild zooom.min=index.js --bundle --minify --sourcemap --target=chrome79,firefox106,safari12 --format=esm --outdir=dist",
+    "build": "yarn build:dev && yarn build:prod",
     "start": "yarn http-server"
   },
   "dependencies": {

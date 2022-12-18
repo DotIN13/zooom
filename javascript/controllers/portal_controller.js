@@ -19,7 +19,7 @@ export default class extends Controller {
       [...Array(8)].map(() => Math.random().toString(36)[2]).join("");
     this.element.id = this.idValue;
     this.templateTarget.content.querySelector(
-      ".player-inner"
+      "[data-controller]"
     ).dataset.portalId = this.idValue;
   }
 

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../javascript/stylesheets/zooom.css"],
+  "sourcesContent": [".portal-player {\n  position: fixed;\n  inset: 0;\n}\n\n[data-portal-target=\"image\"] {\n  cursor: zoom-in;\n}\n\n.portal-player [data-zooom-target=\"image\"] {\n  display: block;\n  transform: none;\n  visibility: hidden;\n}\n"],
+  "mappings": "AAAA,eACE,eACA,QAGF,2BACE,eAGF,yCACE,cACA,eACA",
+  "names": []
+}

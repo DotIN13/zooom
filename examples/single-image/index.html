@@ -23,6 +23,7 @@
       href="./assets/stylesheets/custom.css"
       type="text/css"
     />
+    <link rel="stylesheet" href="/dist/zooom.css" type="text/css" />
   </head>
   <body>
     <main data-controller="portal">
@@ -33,21 +34,16 @@
         data-action="click->portal#open"
       />
       <template data-portal-target="template">
-        <div
-          class="zooom-container player-inner"
-          data-controller="zooom"
-          data-action="playerAdded->zooom#added "
-        >
+        <div data-controller="zooom">
           <div class="zooom-image-container">
             <img
-              class="zooom-image"
-              data-action="load->zooom#zoomIn click->zooom#zoomOut scroll@window->zooom#zoomOut"
+              data-action="load->zooom#zoomIn click->zooom#magnify scroll@window->zooom#scrollOut"
               data-zooom-target="image"
               src="./assets/images/cross.jpeg"
             />
           </div>
         </div>
       </template>
-    </div>
+    </main>
   </body>
 </html>

@@ -5,18 +5,3 @@ body {
 main {
   margin: 100vh 0;
 }
-
-.portal-player {
-  position: fixed;
-  inset: 0;
-}
-
-.zooom-container {
-  position: relative;
-}
-
-img.zooom-image {
-  display: block;
-  transform: none;
-  visibility: hidden;
-}

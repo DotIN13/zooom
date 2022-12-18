@@ -8,6 +8,41 @@ export default class extends Controller {
     this.element.dataset.zooomPortalOutlet = `#${this.element.dataset.portalId}`;
     this.portalImage = this.portalOutlet.imageTarget;
     this.portalRect = this.portalImage.getBoundingClientRect();
+    this.handleGesture();
+  }
+
+  // Scroll event callback
+  scrollOut(event) {
+    if (this.zoomingOut) return;
+
+    const target = event.target === document ? window : event.target;
+    this.baseScrollX ||= target.scrollX;
+    this.baseScrollY ||= target.scrollY;
+
+    const xDiff = target.scrollX - this.baseScrollX;
+    const yDiff = target.scrollY - this.baseScrollY;
+
+    if (Math.abs(xDiff) > 20 || Math.abs(yDiff) > 20) this.zoomOut();
+  }
+
+  // Click event callback
+  magnify(event) {
+    const transform = "scale(2)";
+    this.commitStyles(this.imageTarget.style, { transform });
+    console.log(event);
+  }
+
+  // Gesture callback
+  handleGesture() {
+    this.imageTarget.addEventListener("gesturestart", (e) => {
+      console.log(e);
+    });
+    this.imageTarget.addEventListener("gesturechange", (e) => {
+      console.log(e);
+    });
+    this.imageTarget.addEventListener("gestureend", (e) => {
+      console.log(e);
+    });
   }
 
   zoomIn() {
@@ -37,25 +72,28 @@ export default class extends Controller {
     const style = this.imageTarget.style;
     this.imageRect = this.imageTarget.getBoundingClientRect();
 
-    let { top, left, width, height } = this.imageRect;
-    const pos = { top, left, width, height };
-    let position = "fixed",
-      transition = "none",
-      transform = "none";
-    this.commitStyles(style, { ...pos, position, transition, transform });
-
-    this.imageTarget.addEventListener("transitionend", (e) => {
-      if (e.propertyName != "transform") return;
-
-      this.zoomingOut = false;
-      this.portalOutlet.removeContainer(this.element.closest(".portal-player"));
-    });
+    const { top, left, width, height } = this.imageRect;
+    const position = "fixed";
+    this.commitStyles(style, { transform: "none", transition: "none" });
 
     window.requestAnimationFrame(() => {
-      transition = "transform 400ms cubic-bezier(0.4, 0, 0, 1)";
-      transform = this.newTransform(this.imageRect, this.portalRect);
-      this.updateTopLeft();
-      this.commitStyles(style, { transition, transform });
+      this.commitStyles(style, { top, left, width, height, position });
+
+      window.requestAnimationFrame(() => {
+        this.imageTarget.addEventListener("transitionend", (e) => {
+          if (e.propertyName != "transform") return;
+
+          this.zoomingOut = false;
+          this.portalOutlet.removeContainer(
+            this.element.closest(".portal-player")
+          );
+        });
+
+        const transition = "transform 400ms cubic-bezier(0.4, 0, 0, 1)";
+        const transform = this.newTransform(this.imageRect, this.portalRect);
+        this.updateTopLeft();
+        this.commitStyles(style, { transition, transform });
+      });
     });
   }
 
